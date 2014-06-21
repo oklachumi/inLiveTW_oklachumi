@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>inLiveTW_desktop</title>
+	<script type="text/javascript">
+
+		if (localStorage.userid!="guest" || sessionStorage.userpwd!="inlivetw") {
+			alert ("帳號密碼錯誤, 請回首頁登入!!");
+			sessionStorage.removeItem('userpwd');
+			document.location="inLivelogin.html";
+		}
+	function isLoad() {
+		document.getElementById("showuserid").innerHTML = localStorage.userid;
+		var div_list = "";
+		var sale_item = new Array("a直播","b直播","c直播","d直播","e直播");
+
+		for (i in sale_item)
+		{	
+			div_list = div_list + "<div class='liveTW'>"
+			div_list = div_list + "<img class='img_liveTW' src='liveTW" + i + ".png'><br/>"
+			div_list = div_list + "<font style='color:#ff0000'>" + sale_item[i] + "</font><br />"
+			div_list = div_list + "<input type='checkbox' name='chkitem' value='" + sale_item[i] + "'>"
+			div_list = div_list + "</div>"	
+			//<div class='fruit'>
+			//<img class='img_fruit' src='images/fruit0.png'><br/>
+			//<font style='color:#ff0000'>sale_item[0]</font><br/>
+			//<input type='checkbox' name='chkitem' value='sale_item[0]'>
+			//</div>
+		}
+		document.getElementById("div_live").insertAdjacentHTML("beforeend", div_list);
+
+		if (localStorage.Cartlist)
+			shopping_list.value = "您的Live清單：" + localStorage.Cartlist;
+		else
+			shopping_list.value = "您的Live清單：";
+		
+		clearButton.addEventListener("click", clearCart);
+		cartButton.addEventListener("click", addtoCart);
+		
+	}
+
+	function clearCart() {	
+		shopping_list.value = "您的Live清單：";
+		localStorage.removeItem("Cartlist");         /*清空localStorage*/
+	}
+
+	function addtoCart() {  
+		var checkselect = "";
+		var checkBoxList = document.getElementsByName('chkitem'); 
+		for (i in checkBoxList)
+		{
+			if (checkBoxList[i].checked)   
+		  {   
+				checkselect = checkselect + "\n" + checkBoxList[i].value;
+		  }   
+		}	
+
+		if (!localStorage.Cartlist)
+			localStorage.Cartlist = checkselect;
+		else
+			localStorage.Cartlist = localStorage.Cartlist + checkselect;
+		shopping_list.value = "您的Live清單：" + localStorage.Cartlist;
+	}
+	//登出
+	function logout() {
+		localStorage.removeItem('userid');
+		sessionStorage.clear();
+		document.location = 'inLive_login.html';
+	}
+	</script>
+	</head>
+	<body onload="isLoad()">
+		<div id="main">
+		  <header> 歡迎光臨inLiveTW <input type="button" value="登出" onclick="logout();"></header>	  
+			<span id="showuserid">aaa</span> 您好<br />請選擇inLiveTW<br />
+			<button id="clearButton">清除LiveTW</button><br>
+			<button id="cartButton">放入LiveTW</button>
+			<textarea id="shopping_list" rows="15" cols="30"></textarea>
+			<div id="div_live"></div> 
+		</div>
+
+	</body>
+</html>
